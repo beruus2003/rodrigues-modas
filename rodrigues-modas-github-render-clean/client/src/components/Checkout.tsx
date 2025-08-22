@@ -32,16 +32,24 @@ export function Checkout({ isOpen, onClose }: CheckoutProps) {
       return;
     }
 
-    // Criar mensagem para WhatsApp
-    const message = `Oi, Fiquei Interessado(a) Nesse(s) Produto(s) e Queria Saber Mais:
+    // Criar mensagem para WhatsApp com links das imagens
+const message = `Oi, Fiquei Interessado(a) Nesse(s) Produto(s) e Queria Saber Mais:
 
-${cartItems.map((item, index) => 
-  `${index + 1}. *${item.product.name}*
+${cartItems.map((item, index) => {
+  // Obter URL completa da imagem
+  const imageUrl = item.product.images?.[0] 
+    ? (item.product.images[0].startsWith('http') 
+        ? item.product.images[0] 
+        : `${window.location.origin}${item.product.images[0]}`)
+    : '';
+  
+  return `${index + 1}. *${item.product.name}*
    • Cor: ${item.selectedColor}
    • Tamanho: ${item.selectedSize} 
    • Quantidade: ${item.quantity}
-   • Preço: ${formatPrice(typeof item.product.price === 'string' ? parseFloat(item.product.price) : item.product.price)}`
-).join('\n\n')}
+   • Preço: ${formatPrice(typeof item.product.price === 'string' ? parseFloat(item.product.price) : item.product.price)}${imageUrl ? `
+   📷 Foto: ${imageUrl}` : ''}`
+}).join('\n\n')}
 
 💰 *Total: ${formatPrice(subtotal)}*
 

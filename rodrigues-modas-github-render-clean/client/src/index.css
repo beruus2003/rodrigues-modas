@@ -53,6 +53,15 @@
 }
 
 @layer base {
+  /* ======================================================= */
+  /* >> A CORREÇÃO ESTÁ AQUI << */
+  /* Adicionamos a propriedade 'overflow-x-hidden' para impedir */
+  /* a rolagem horizontal em toda a página. */
+  /* ======================================================= */
+  html, body {
+    @apply overflow-x-hidden;
+  }
+
   * {
     @apply border-border;
   }

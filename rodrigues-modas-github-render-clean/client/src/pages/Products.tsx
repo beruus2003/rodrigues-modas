@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Search, Filter, Grid, List } from "lucide-react";
+import { Search, Filter, Grid } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -45,13 +45,19 @@ export default function Products() {
     .sort((a, b) => {
       switch (sortBy) {
         case "name":
+          // A ordenação por nome é segura, assumindo que sempre haverá um nome.
           return a.name.localeCompare(b.name);
         case "price-asc":
-          return parseFloat(a.price) - parseFloat(b.price);
+          // Adicionado fallback '|| 0' para evitar erros se o preço for inválido.
+          return (parseFloat(a.price) || 0) - (parseFloat(b.price) || 0);
         case "price-desc":
-          return parseFloat(b.price) - parseFloat(a.price);
+          // Adicionado fallback '|| 0' para evitar erros se o preço for inválido.
+          return (parseFloat(b.price) || 0) - (parseFloat(a.price) || 0);
         case "newest":
-          return new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime();
+          // Adicionada verificação para garantir que 'createdAt' exista antes de criar uma data.
+          const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+          const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+          return dateB - dateA;
         default:
           return 0;
       }
